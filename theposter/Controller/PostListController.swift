@@ -16,15 +16,7 @@ class PostListController: UITableViewController {
 
     private var postCollection: postDictionary = []
     private var fetch_data: FetchData?
-    
 
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        print("init inited")
-    }
-    
-    
-    
     // MARK: - Life cycle methods
     
     override func viewDidLoad() {
@@ -32,14 +24,19 @@ class PostListController: UITableViewController {
         refreshControl = UIRefreshControl()
         refreshControl?.attributedTitle = NSAttributedString(string: "Refreshing...")
         refreshControl?.addTarget(self, action: #selector(refresh), for: UIControlEvents.valueChanged)
+        navigationItem.rightBarButtonItem = editButtonItem
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
 
-    
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refreshControl?.endRefreshing()
+        tableView.setEditing(false, animated: false)
+    }
+
     // MARK: - TableView Data Source
     
     @objc func refresh(_ sender: Any) {
@@ -58,51 +55,52 @@ class PostListController: UITableViewController {
 
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        let count = max(postCollection.count, 0);
-        return count
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return max(postCollection.count, 0);
     }
-    
-    
-   
-    
+
     // MARK: Override Default Cell view
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell", for: indexPath) as? PostTableViewCell  else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell", for: indexPath) as? PostTableViewCell else {
             fatalError("The dequeued cell is not an instance of PostTableViewCell.")
         }
         
         if postCollection.count < 1 { return cell }
         
-        let post = postCollection[indexPath[0]]
+        let post = postCollection[indexPath.row]
         cell.titleCell.text = post["title"] as? String
         cell.imageURL = URL(string: "\((fetch_data?.API_ADDR)!)/post/\(post["id"] as! String)/upload_thumbs")
-        
         return cell
     }
-    
-    
-    
-    
+
+    @IBAction func editPosts(_ sender: UIBarButtonItem) {
+        tableView.setEditing(!tableView.isEditing, animated: true)
+        refreshControl?.beginRefreshing()
+    }
+
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            fetch_data?.removePostById(postCollection[indexPath.row]["id"] as! String)
+            postCollection.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+
     // MARK: - Navigation segues
     
     var seguePost: [String: Any?]?
     
-    @IBAction func addPost(_ sender: UIBarButtonItem) {
+    @IBAction func addPost(_ sender: UIButton) {
         seguePost = nil
         self.performSegue(withIdentifier: "segue_global", sender: self)
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let indexPath = tableView.indexPathForSelectedRow!
-        let currentCell = tableView.cellForRow(at: indexPath)! as! PostTableViewCell
-        let indexOfCell = Int(String(describing: currentCell)) ?? 0
-        
-        seguePost = postCollection[indexPath[indexOfCell]]
+        seguePost = postCollection[indexPath.row]
         
         // create new segue (needs available on board)
         self.performSegue(withIdentifier: "segue_global", sender: self)
@@ -117,3 +115,11 @@ class PostListController: UITableViewController {
     }
 }
 
+extension UIViewController {
+    func setStatusBarStyle(_ style: UIStatusBarStyle) {
+        if let statusBar = UIApplication.shared.value(forKey: "statusBar") as? UIView {
+            statusBar.backgroundColor = style == .lightContent ? UIColor.black : .white
+            statusBar.setValue(style == .lightContent ? UIColor.white : .black, forKey: "foregroundColor")
+        }
+    }
+}

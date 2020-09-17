@@ -1,0 +1,6 @@
+framework module Pods_theposter {
+  umbrella header "Pods-theposter-umbrella.h"
+
+  export *
+  module * { export * }
+}

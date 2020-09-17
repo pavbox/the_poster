@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18D88224FCE6019D54BB2B86 /* Pods_theposter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 45A208572D5EC9A04280A13F /* Pods_theposter.framework */; };
 		8408AA881F6F22E10049EFD1 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8408AA871F6F22E10049EFD1 /* Package.swift */; };
 		840CA7BE1F79140900EF8B87 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 840CA7BD1F79140900EF8B87 /* Post.swift */; };
 		8452F85C1F6BF662003BF79E /* ImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8452F85B1F6BF662003BF79E /* ImagePickerController.swift */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		45A208572D5EC9A04280A13F /* Pods_theposter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_theposter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8408AA871F6F22E10049EFD1 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 		840CA7BD1F79140900EF8B87 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		8452F85B1F6BF662003BF79E /* ImagePickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePickerController.swift; sourceTree = "<group>"; };
@@ -36,6 +38,8 @@
 		848822FB1F6B67EA000986A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		848B734F1F6E10DE00D00B2F /* PostCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCollection.swift; sourceTree = "<group>"; };
 		848B73511F6E11F800D00B2F /* FetchData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchData.swift; sourceTree = "<group>"; };
+		943F3BA78EAAFA5C80809F0C /* Pods-theposter.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-theposter.debug.xcconfig"; path = "Target Support Files/Pods-theposter/Pods-theposter.debug.xcconfig"; sourceTree = "<group>"; };
+		C3EE9A25C488004597A072E9 /* Pods-theposter.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-theposter.release.xcconfig"; path = "Target Support Files/Pods-theposter/Pods-theposter.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,12 +47,23 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18D88224FCE6019D54BB2B86 /* Pods_theposter.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		02467CD2E354A398DCB15674 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				943F3BA78EAAFA5C80809F0C /* Pods-theposter.debug.xcconfig */,
+				C3EE9A25C488004597A072E9 /* Pods-theposter.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		840CA7BC1F79124700EF8B87 /* DTO */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,6 +108,8 @@
 				8408AA871F6F22E10049EFD1 /* Package.swift */,
 				848822EE1F6B67E9000986A8 /* theposter */,
 				848822ED1F6B67E9000986A8 /* Products */,
+				02467CD2E354A398DCB15674 /* Pods */,
+				AF4E5C803153E12E34A8D316 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -117,6 +134,14 @@
 			path = theposter;
 			sourceTree = "<group>";
 		};
+		AF4E5C803153E12E34A8D316 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				45A208572D5EC9A04280A13F /* Pods_theposter.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -124,9 +149,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 848822FE1F6B67EA000986A8 /* Build configuration list for PBXNativeTarget "theposter" */;
 			buildPhases = (
+				7D186075C6CFC3E605D648A0 /* [CP] Check Pods Manifest.lock */,
 				848822E81F6B67E9000986A8 /* Sources */,
 				848822E91F6B67E9000986A8 /* Frameworks */,
 				848822EA1F6B67E9000986A8 /* Resources */,
+				4475557ADBA3E21C5502C41B /* [CP] Embed Pods Frameworks */,
+				EC578E39ED55027E1128FFBF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -183,6 +211,69 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4475557ADBA3E21C5502C41B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-theposter/Pods-theposter-frameworks.sh",
+				"${PODS_ROOT}/TwitterCore/iOS/TwitterCore.framework",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TwitterKit.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-theposter/Pods-theposter-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7D186075C6CFC3E605D648A0 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-theposter-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		EC578E39ED55027E1128FFBF /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-theposter/Pods-theposter-resources.sh",
+				"${PODS_ROOT}/TwitterKit/iOS/TwitterKit.framework/TwitterKitResources.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/TwitterKitResources.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-theposter/Pods-theposter-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		848822E81F6B67E9000986A8 /* Sources */ = {
@@ -332,6 +423,7 @@
 		};
 		848822FF1F6B67EA000986A8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 943F3BA78EAAFA5C80809F0C /* Pods-theposter.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -348,6 +440,7 @@
 		};
 		848823001F6B67EA000986A8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C3EE9A25C488004597A072E9 /* Pods-theposter.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

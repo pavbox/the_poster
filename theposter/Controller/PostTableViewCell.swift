@@ -21,7 +21,6 @@ class PostTableViewCell: UITableViewCell {
         super.awakeFromNib()
     }
     
-    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
@@ -34,20 +33,23 @@ class PostTableViewCell: UITableViewCell {
     }
     
     private func updateUI() {
-        if let url = imageURL {
-            DispatchQueue.global(qos: .userInitiated).async {
-                let contentsOfURL = try? Data(contentsOf: url)
-                DispatchQueue.main.async {
-                    if url == self.imageURL {
-                        if let imageData = contentsOfURL {
-                            self.imageCell?.image = UIImage(data: imageData)
-                        } else {
-                            self.imageCell?.image = UIImage(named: "angry")
-                        }
-                    }
+        guard let url = imageURL else {
+            imageCell?.image = UIImage(named: "angry")
+            return
+        }
+
+        imageCell.layer.cornerRadius = 4
+
+        URLSession.shared.dataTask(with: url) { (data, response, error) in
+            guard let data = data else { return }
+            DispatchQueue.main.async() { () -> Void in
+                if url == self.imageURL {
+                    self.imageCell?.image = UIImage(data: data)
+                } else {
+                    self.imageCell?.image = UIImage(named: "angry")
                 }
             }
-        }
+        }.resume()
     }
 }
 

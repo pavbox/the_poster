@@ -8,7 +8,8 @@
 
 
 import UIKit
-//import Alamofire
+import TwitterCore
+import TwitterKit
 
 class PostPageController: UIViewController {
 
@@ -25,6 +26,7 @@ class PostPageController: UIViewController {
     @IBOutlet weak var insidePostView: UIView!
     @IBOutlet weak var heightOfTextView: NSLayoutConstraint!
     
+    @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var scrollView: UIScrollView! {
         didSet {
             scrollView.contentSize = insidePostView.frame.size
@@ -49,14 +51,53 @@ class PostPageController: UIViewController {
         print("touch down")
     }
 
+    @IBAction func shareAction(_ sender: UIButton) {
+        post()
+    }
+
+    private func post() {
+        let text = ""
+        if TWTRTwitter.sharedInstance().sessionStore.hasLoggedInUsers() {
+            // App must have at least one logged-in user to compose a Tweet
+            let composer = TWTRComposer()
+            composer.setText(text)
+            composer.setImage(selectedImage)
+            composer.show(from: navigationController!) { (result) in
+                print(result)
+            }
+        } else {
+            // Log in, and then check again
+            TWTRTwitter.sharedInstance().logIn { session, error in
+                if session != nil { // Log in succeeded
+                    let composer = TWTRComposer()
+                    composer.setText(text)
+                    composer.setImage(self.selectedImage)
+                    composer.show(from: self.navigationController!) { (result) in
+                        print(result)
+                    }
+                } else {
+                    let alert = UIAlertController(title: "No Twitter Accounts Available",
+                                                  message: "You must log in before presenting a composer.",
+                                                  preferredStyle: .alert)
+                    self.present(alert, animated: false, completion: nil)
+                }
+            }
+        }
+    }
     
     // MARK: Initial and prepare events
     private func initCustomUI() {
         // set similar view for TextView
-        let lightGrayColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.1)
+        let lightGrayColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.2)
         bodyTextField.layer.borderWidth = 1.0
         bodyTextField.layer.borderColor = lightGrayColor.cgColor
         bodyTextField.layer.cornerRadius = 5
+        imageButton.layer.borderWidth = 1.0
+        imageButton.layer.borderColor = lightGrayColor.cgColor
+        imageButton.layer.cornerRadius = 5
+        imageButton.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.1)
+        shareButton.layer.cornerRadius = 8
+        view.backgroundColor = .black
     }
     
     
@@ -112,11 +153,6 @@ class PostPageController: UIViewController {
         }
         
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     
     // MARK: - Events
     @IBAction func imageButtonPick(_ sender: UIButton) {
@@ -133,10 +169,13 @@ class PostPageController: UIViewController {
     @IBAction func savePost(_ sender: UIBarButtonItem) {
         if  !bodyTextField.text.isEmpty ||
             !hashtagField.text!.isEmpty ||
-            self.selectedImage != nil {
+            selectedImage != nil {
             
             let imageURL = (seguePost != nil) ? seguePost!["id"]! as? String : ""
-            
+
+            let indicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
+            sender.customView = indicator
+            indicator.startAnimating()
             fetch_data!.savePostToDatabase(
                 description: bodyTextField.text,
                 hashtag: hashtagField.text!,
@@ -144,9 +183,20 @@ class PostPageController: UIViewController {
                 isUpdate: (seguePost != nil)
             ) { (id) in
                 if (self.selectedImage != nil) {
-                    // send without image
-                    self.fetch_data!.uploadImage(self.selectedImage!, id)
+                    self.fetch_data!.uploadImage(self.selectedImage!, id) {
+                        DispatchQueue.main.async {
+                            indicator.stopAnimating()
+                            sender.customView = nil
+                            sender.isEnabled = false
+                        }
+                    }
                     self.selectedImage = nil
+                } else {
+                    DispatchQueue.main.async {
+                        indicator.stopAnimating()
+                        sender.customView = nil
+                        sender.isEnabled = false
+                    }
                 }
             }
         }
@@ -154,26 +204,20 @@ class PostPageController: UIViewController {
 }
 
 
-
-
 // MARK: - UIImagePickerControllerDelegate
 extension PostPageController: UIImagePickerControllerDelegate {
     private func loadFromUrl(_ imageUrl: URL?) {
         if let url = imageUrl {
-            
             DispatchQueue.global(qos: .userInitiated).async {
                 let contentsOfURL = try? Data(contentsOf: url)
                 DispatchQueue.main.async {
                     if let imageData = contentsOfURL {
-                        // self.imageButton.image = UIImage(data: imageData)
                         self.chooseImage(UIImage(data: imageData), for: UIControlState.normal)
                     } else {
-                        // self.imageCell?.image = UIImage(named: "angry")
                         self.chooseImage(UIImage(named: "angry"), for: UIControlState.normal)
                     }
                 }
             }
-            
         }
     }
     

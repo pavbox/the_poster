@@ -152,7 +152,7 @@ class FetchData: NSObject {
     /**
      * Binary Parse image and send to server
      */
-    public func uploadImage(_ image: UIImage, _ id: String) {
+    public func uploadImage(_ image: UIImage, _ id: String, completion: @escaping () -> Void) {
         let boundary = "Boundary-\(UUID().uuidString)"
         
         var request  = URLRequest(url: URL(string: "\(self.API_ADDR)/post/\(id)/upload")!)
@@ -166,8 +166,9 @@ class FetchData: NSObject {
         
         
         URLSession.shared.dataTask(with: request) { data, response, error in
-            guard error == nil else { print(error!); return }
+            completion()
 
+            guard error == nil else { print(error!); return }
             do {
                 try JSONSerialization.jsonObject(with: data!)
             } catch {
